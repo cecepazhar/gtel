@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "GTEL Dashboard",
+  "version": "0.1.0",
+  "identifier": "com.gerlink.gtel",
+  "build": {
+    "frontendDist": "../frontend/build",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm --prefix ../frontend run dev",
+    "beforeBuildCommand": "npm --prefix ../frontend run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "GTEL - Global Telemetry & Medical Analytics",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 768,
+        "backgroundColor": "#0f172a"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": []
+  }
+}

@@ -1,0 +1,29 @@
+[package]
+name = "gtel-core"
+version = "0.1.0"
+description = "GTEL Rust Core Backend (Tauri v2 + PostGIS)"
+authors = ["Gerlink R&D"]
+edition = "2021"
+
+[lib]
+name = "gtel_core_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[executable]
+name = "gtel-core"
+path = "src/main.rs"
+
+[dependencies]
+tauri = { version = "2.2", features = [] }
+tauri-plugin-opener = "2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.40", features = ["full"] }
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono", "macros"] }
+chrono = { version = "0.4", features = ["serde"] }
+dotenvy = "0.15"
+log = "0.4"
+env_logger = "0.11"
+
+[build-dependencies]
+tauri-build = { version = "2.2", features = [] }
