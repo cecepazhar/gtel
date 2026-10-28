@@ -1,2 +1,5 @@
 /frontend/node_modules
 /src-tauri/target
+/frontend/.svelte-kit
+/frontend/build
+/src-tauri/gen

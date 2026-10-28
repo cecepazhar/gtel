@@ -61,3 +61,19 @@ pub struct ErrorLogEntry {
     pub message: String,
     pub severity: String, // "Critical", "Warning", "Info"
 }
+
+// PRD v2.0 Device Inventory columns
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct DeviceInventoryItem {
+    pub device_id: String,
+    pub hospital: String,
+    pub software: String, // GLESCOPE | ANTECH | EASTTECH | ZEUS
+    pub usage_count: i64,
+    pub software_hours: f64,
+    pub light_source_hours: f64,
+    pub patients: i64,
+    pub doctors: i64,
+    pub examinations: i64,
+    pub reports: i64,
+    pub recent_error: String,
+}

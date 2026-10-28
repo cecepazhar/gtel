@@ -9,10 +9,6 @@ edition = "2021"
 name = "gtel_core_lib"
 crate-type = ["lib", "cdylib", "staticlib"]
 
-[executable]
-name = "gtel-core"
-path = "src/main.rs"
-
 [dependencies]
 tauri = { version = "2.2", features = [] }
 tauri-plugin-opener = "2"

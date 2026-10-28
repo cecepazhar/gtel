@@ -38,7 +38,10 @@ async fn main() {
             get_telemetry_summary,
             get_hospital_distribution,
             get_patient_doctor_metrics,
-            get_error_logs
+            get_error_logs,
+            verify_pin,
+            set_pin,
+            get_device_inventory,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

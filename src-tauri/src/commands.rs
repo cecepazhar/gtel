@@ -200,3 +200,40 @@ pub async fn get_error_logs(_state: State<'_, AppState>) -> Result<Vec<ErrorLogE
         },
     ])
 }
+
+use std::sync::Mutex;
+
+thread_local! {
+    static PIN_STORE: Mutex<String> = Mutex::new("1234".to_string());
+}
+
+#[tauri::command]
+pub fn verify_pin(pin: String) -> Result<bool, String> {
+    let stored = PIN_STORE.with(|m| m.lock().unwrap().clone());
+    Ok(pin == stored)
+}
+
+#[tauri::command]
+pub fn set_pin(new_pin: String) -> Result<(), String> {
+    if new_pin.len() != 4 || !new_pin.chars().all(|c| c.is_ascii_digit()) {
+        return Err("PIN must be exactly 4 digits".into());
+    }
+    PIN_STORE.with(|m| *m.lock().unwrap() = new_pin);
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn get_device_inventory(_state: State<'_, AppState>) -> Result<Vec<DeviceInventoryItem>, String> {
+    Ok(vec![
+        DeviceInventoryItem { device_id: "DEV-GLS-SUB-001".into(), hospital: "RSUP Dr. Cipto Mangunkusumo".into(), software: "GLESCOPE".into(), usage_count: 142, software_hours: 328.5, light_source_hours: 245.0, patients: 420, doctors: 6, examinations: 890, reports: 885, recent_error: "ERR_SENSOR_TIMEOUT".into() },
+        DeviceInventoryItem { device_id: "DEV-ZEU-PHT-002".into(), hospital: "RSUP Dr. Cipto Mangunkusumo".into(), software: "ZEUS".into(), usage_count: 98, software_hours: 210.0, light_source_hours: 180.5, patients: 310, doctors: 4, examinations: 620, reports: 615, recent_error: "".into() },
+        DeviceInventoryItem { device_id: "DEV-ANT-INF-003".into(), hospital: "RSUD Dr. Soetomo".into(), software: "ANTECH".into(), usage_count: 205, software_hours: 450.2, light_source_hours: 0.0, patients: 680, doctors: 8, examinations: 1200, reports: 1198, recent_error: "ERR_OCCLUSION_SPIKE".into() },
+        DeviceInventoryItem { device_id: "DEV-EST-MON-004".into(), hospital: "RSUD Dr. Soetomo".into(), software: "EASTTECH".into(), usage_count: 176, software_hours: 380.0, light_source_hours: 0.0, patients: 540, doctors: 5, examinations: 980, reports: 975, recent_error: "ERR_PROBE_DISCONNECTED".into() },
+        DeviceInventoryItem { device_id: "DEV-GLS-SUB-005".into(), hospital: "RSUP Dr. Sardjito".into(), software: "GLESCOPE".into(), usage_count: 130, software_hours: 290.0, light_source_hours: 210.5, patients: 390, doctors: 5, examinations: 800, reports: 798, recent_error: "".into() },
+        DeviceInventoryItem { device_id: "DEV-ZEU-PHT-006".into(), hospital: "RSUP H. Adam Malik".into(), software: "ZEUS".into(), usage_count: 88, software_hours: 195.0, light_source_hours: 160.0, patients: 280, doctors: 3, examinations: 560, reports: 555, recent_error: "ERR_THERMAL_OVERHEAT".into() },
+        DeviceInventoryItem { device_id: "DEV-ANT-INF-007".into(), hospital: "RSUP H. Adam Malik".into(), software: "ANTECH".into(), usage_count: 160, software_hours: 340.0, light_source_hours: 0.0, patients: 500, doctors: 6, examinations: 1050, reports: 1048, recent_error: "".into() },
+        DeviceInventoryItem { device_id: "DEV-EST-MON-008".into(), hospital: "RSUP Sanglah".into(), software: "EASTTECH".into(), usage_count: 145, software_hours: 310.0, light_source_hours: 0.0, patients: 460, doctors: 5, examinations: 920, reports: 918, recent_error: "".into() },
+        DeviceInventoryItem { device_id: "DEV-GLS-SUB-009".into(), hospital: "RSUD Abdul Moeloek".into(), software: "GLESCOPE".into(), usage_count: 75, software_hours: 160.0, light_source_hours: 120.0, patients: 220, doctors: 3, examinations: 440, reports: 438, recent_error: "ERR_POWER_FAILURE".into() },
+        DeviceInventoryItem { device_id: "DEV-ZEU-PHT-010".into(), hospital: "RSUD Dr. Soetomo".into(), software: "ZEUS".into(), usage_count: 110, software_hours: 240.0, light_source_hours: 200.0, patients: 350, doctors: 4, examinations: 700, reports: 698, recent_error: "".into() },
+    ])
+}
