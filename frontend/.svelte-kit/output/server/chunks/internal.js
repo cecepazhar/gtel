@@ -103,7 +103,7 @@ const options = {
     app: ({ head, body, assets, nonce, env }) => '<!doctype html>\n<html lang="en" class="dark">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets + '/favicon.png" />\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\n		<title>GTEL Dashboard - Gerlink Telemetry & Global Analytics</title>\n		' + head + '\n	</head>\n	<body class="bg-dark-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">\n		<div style="display: contents">' + body + "</div>\n	</body>\n</html>\n",
     error
   },
-  version_hash: "1xty7uj"
+  version_hash: "1f24kcc"
 };
 async function get_hooks() {
   let handle;

@@ -26,7 +26,7 @@ export const options = {
 		app: ({ head, body, assets, nonce, env }) => "<!doctype html>\n<html lang=\"en\" class=\"dark\">\n\t<head>\n\t\t<meta charset=\"utf-8\" />\n\t\t<link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\n\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\t\t<title>GTEL Dashboard - Gerlink Telemetry & Global Analytics</title>\n\t\t" + head + "\n\t</head>\n\t<body class=\"bg-dark-900 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white\">\n\t\t<div style=\"display: contents\">" + body + "</div>\n\t</body>\n</html>\n",
 		error
 	},
-	version_hash: "h13vrw"
+	version_hash: "17j4lge"
 };
 
 export async function get_hooks() {

@@ -1,4 +1,4 @@
-import { clsx as clsx$1 } from "clsx";
+import { n as noop, h as deferred, p as set_ssr_context, q as ssr_context, t as push, u as pop, e as escape_html, v as has_own_property, i as is_array, w as to_class, x as to_style, y as clsx, m as attr } from "./context.js";
 import * as devalue from "devalue";
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
@@ -37,43 +37,6 @@ const STALE_REACTION = new class StaleReactionError extends Error {
   message = "The reaction that called `getAbortSignal()` was re-run or destroyed";
 }();
 const COMMENT_NODE = 8;
-var is_array = Array.isArray;
-var index_of = Array.prototype.indexOf;
-var includes = Array.prototype.includes;
-var array_from = Array.from;
-var define_property = Object.defineProperty;
-var get_descriptor = Object.getOwnPropertyDescriptor;
-var object_prototype = Object.prototype;
-var array_prototype = Array.prototype;
-var get_prototype_of = Object.getPrototypeOf;
-var is_extensible = Object.isExtensible;
-var has_own_property = Object.prototype.hasOwnProperty;
-const noop = () => {
-};
-function run_all(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    arr[i]();
-  }
-}
-function deferred() {
-  var resolve;
-  var reject;
-  var promise = new Promise((res, rej) => {
-    resolve = res;
-    reject = rej;
-  });
-  return { promise, resolve, reject };
-}
-function lifecycle_outside_component(name) {
-  {
-    throw new Error(`https://svelte.dev/e/lifecycle_outside_component`);
-  }
-}
-function set_context_after_init() {
-  {
-    throw new Error(`https://svelte.dev/e/set_context_after_init`);
-  }
-}
 const HYDRATION_START = "[";
 const HYDRATION_START_ELSE = "[!";
 const HYDRATION_START_FAILED = "[?";
@@ -83,19 +46,6 @@ const ELEMENT_IS_NAMESPACED = 1;
 const ELEMENT_PRESERVE_ATTRIBUTE_CASE = 1 << 1;
 const ELEMENT_IS_INPUT = 1 << 2;
 const UNINITIALIZED = Symbol("uninitialized");
-function get_parent_context(context2) {
-  let parent = context2.p;
-  while (parent !== null && parent.c === null) {
-    parent = parent.p;
-  }
-  return parent?.c ?? null;
-}
-function get_or_init_context_map(context2, name) {
-  if (context2 === null) {
-    lifecycle_outside_component();
-  }
-  return context2.c ??= new Map(get_parent_context(context2) || void 0);
-}
 const DOM_BOOLEAN_ATTRIBUTES = [
   "allowfullscreen",
   "async",
@@ -133,163 +83,6 @@ const PASSIVE_EVENTS = ["touchstart", "touchmove"];
 function is_passive_event(name) {
   return PASSIVE_EVENTS.includes(name);
 }
-const ATTR_REGEX = /[&"<]/g;
-const CONTENT_REGEX = /[&<]/g;
-function escape_html(value, is_attr) {
-  const str = String(value ?? "");
-  const pattern = is_attr ? ATTR_REGEX : CONTENT_REGEX;
-  pattern.lastIndex = 0;
-  let escaped = "";
-  let last = 0;
-  while (pattern.test(str)) {
-    const i = pattern.lastIndex - 1;
-    const ch = str[i];
-    escaped += str.substring(last, i) + (ch === "&" ? "&amp;" : ch === '"' ? "&quot;" : "&lt;");
-    last = i + 1;
-  }
-  return escaped + str.substring(last);
-}
-const replacements = {
-  translate: /* @__PURE__ */ new Map([
-    [true, "yes"],
-    [false, "no"]
-  ])
-};
-function attr(name, value, is_boolean = false) {
-  if (name === "hidden" && value !== "until-found") {
-    is_boolean = true;
-  }
-  if (value == null || is_boolean && !value && value !== "") return "";
-  const normalized = has_own_property.call(replacements, name) && replacements[name].get(value) || value;
-  const assignment = is_boolean ? `=""` : `="${escape_html(normalized, true)}"`;
-  return ` ${name}${assignment}`;
-}
-function clsx(value) {
-  if (typeof value === "object") {
-    return clsx$1(value);
-  } else {
-    return value ?? "";
-  }
-}
-const whitespace = [..." 	\n\r\f \v\uFEFF"];
-function to_class(value, hash, directives) {
-  var classname = value == null ? "" : "" + value;
-  if (hash) {
-    classname = classname ? classname + " " + hash : hash;
-  }
-  if (directives) {
-    for (var key of Object.keys(directives)) {
-      if (directives[key]) {
-        classname = classname ? classname + " " + key : key;
-      } else if (classname.length) {
-        var len = key.length;
-        var a = 0;
-        while ((a = classname.indexOf(key, a)) >= 0) {
-          var b = a + len;
-          if ((a === 0 || whitespace.includes(classname[a - 1])) && (b === classname.length || whitespace.includes(classname[b]))) {
-            classname = (a === 0 ? "" : classname.substring(0, a)) + classname.substring(b + 1);
-          } else {
-            a = b;
-          }
-        }
-      }
-    }
-  }
-  return classname === "" ? null : classname;
-}
-function append_styles(styles, important = false) {
-  var separator = important ? " !important;" : ";";
-  var css = "";
-  for (var key of Object.keys(styles)) {
-    var value = styles[key];
-    if (value != null && value !== "") {
-      css += " " + key + ": " + value + separator;
-    }
-  }
-  return css;
-}
-function to_css_name(name) {
-  if (name[0] !== "-" || name[1] !== "-") {
-    return name.toLowerCase();
-  }
-  return name;
-}
-function to_style(value, styles) {
-  if (styles) {
-    var new_style = "";
-    var normal_styles;
-    var important_styles;
-    if (Array.isArray(styles)) {
-      normal_styles = styles[0];
-      important_styles = styles[1];
-    } else {
-      normal_styles = styles;
-    }
-    if (value) {
-      value = String(value).replaceAll(/\/\*.*?\*\//g, "").trim();
-      var in_str = false;
-      var in_apo = 0;
-      var in_comment = false;
-      var reserved_names = [];
-      if (normal_styles) {
-        reserved_names.push(...Object.keys(normal_styles).map(to_css_name));
-      }
-      if (important_styles) {
-        reserved_names.push(...Object.keys(important_styles).map(to_css_name));
-      }
-      var start_index = 0;
-      var name_index = -1;
-      const len = value.length;
-      for (var i = 0; i < len; i++) {
-        var c = value[i];
-        if (in_comment) {
-          if (c === "/" && value[i - 1] === "*") {
-            in_comment = false;
-          }
-        } else if (in_str) {
-          if (in_str === c) {
-            in_str = false;
-          }
-        } else if (c === "/" && value[i + 1] === "*") {
-          in_comment = true;
-        } else if (c === '"' || c === "'") {
-          in_str = c;
-        } else if (c === "(") {
-          in_apo++;
-        } else if (c === ")") {
-          in_apo--;
-        }
-        if (!in_comment && in_str === false && in_apo === 0) {
-          if (c === ":" && name_index === -1) {
-            name_index = i;
-          } else if (c === ";" || i === len - 1) {
-            if (name_index !== -1) {
-              var name = to_css_name(value.substring(start_index, name_index).trim());
-              if (!reserved_names.includes(name)) {
-                if (c !== ";") {
-                  i++;
-                }
-                var property = value.substring(start_index, i).trim();
-                new_style += " " + property + ";";
-              }
-            }
-            start_index = i + 1;
-            name_index = -1;
-          }
-        }
-      }
-    }
-    if (normal_styles) {
-      new_style += append_styles(normal_styles);
-    }
-    if (important_styles) {
-      new_style += append_styles(important_styles, true);
-    }
-    new_style = new_style.trim();
-    return new_style === "" ? null : new_style;
-  }
-  return value == null ? null : String(value);
-}
 const BLOCK_OPEN = `<!--${HYDRATION_START}-->`;
 const BLOCK_CLOSE = `<!--${HYDRATION_END}-->`;
 function async_local_storage_unavailable() {
@@ -326,36 +119,6 @@ Could not resolve \`render\` context.
 https://svelte.dev/e/server_context_required`);
   error.name = "Svelte error";
   throw error;
-}
-var ssr_context = null;
-function set_ssr_context(v) {
-  ssr_context = v;
-}
-function getContext(key) {
-  const context_map = get_or_init_context_map(ssr_context);
-  const result = (
-    /** @type {T} */
-    context_map.get(key)
-  );
-  return result;
-}
-function setContext(key, context2) {
-  const context_map = get_or_init_context_map(ssr_context);
-  if (
-    /** @type {SSRContext} */
-    ssr_context.i
-  ) {
-    set_context_after_init();
-  }
-  context_map.set(key, context2);
-  return context2;
-}
-function push(fn) {
-  ssr_context = { p: ssr_context, c: null, r: null, i: false };
-}
-function pop() {
-  ssr_context = /** @type {SSRContext} */
-  ssr_context.p;
 }
 function unresolved_hydratable(key, stack) {
   {
@@ -1381,67 +1144,51 @@ function derived(fn) {
   };
 }
 export {
-  array_from as $,
   ATTRIBUTES_CACHE as A,
   BOUNDARY_EFFECT as B,
   COMPONENT_SYMBOL as C,
   DESTROYED as D,
   ERROR_VALUE as E,
-  ASYNC as F,
-  EAGER_EFFECT as G,
+  is_passive_event as F,
+  render as G,
   HYDRATION_ERROR as H,
   INERT as I,
-  deferred as J,
-  RENDER_EFFECT as K,
-  MANAGED_EFFECT as L,
+  derived as J,
+  ensure_array_like as K,
+  LEGACY_PROPS as L,
   MAYBE_DIRTY as M,
-  DERIVED as N,
-  includes as O,
-  REACTION_IS_UPDATING as P,
-  index_of as Q,
+  attr_class as N,
+  attr_style as O,
+  PAUSED as P,
+  stringify as Q,
   REACTION_RAN as R,
   STATE_SYMBOL as S,
   TEXT_CACHE as T,
   UNINITIALIZED as U,
-  EFFECT_PRESERVED as V,
-  EFFECT_TRANSPARENT as W,
-  PAUSED as X,
-  HEAD_EFFECT as Y,
-  USER_EFFECT as Z,
-  HYDRATION_START_FAILED as _,
   COMMENT_NODE as a,
-  is_passive_event as a0,
-  LEGACY_PROPS as a1,
-  render as a2,
-  setContext as a3,
-  derived as a4,
-  attr_class as a5,
-  ensure_array_like as a6,
-  attr_style as a7,
-  stringify as a8,
   HYDRATION_END as b,
   HYDRATION_START as c,
-  define_property as d,
-  escape_html as e,
-  HYDRATION_START_ELSE as f,
-  getContext as g,
-  array_prototype as h,
-  get_descriptor as i,
-  get_prototype_of as j,
-  is_array as k,
-  is_extensible as l,
-  CLASS_CACHE as m,
-  noop as n,
-  object_prototype as o,
-  STYLE_CACHE as p,
-  DESTROYING as q,
-  run_all as r,
-  EFFECT as s,
-  CONNECTED as t,
-  CLEAN as u,
-  DIRTY as v,
-  STALE_REACTION as w,
-  ROOT_EFFECT as x,
-  BRANCH_EFFECT as y,
-  BLOCK_EFFECT as z
+  HYDRATION_START_ELSE as d,
+  CLASS_CACHE as e,
+  STYLE_CACHE as f,
+  DESTROYING as g,
+  EFFECT as h,
+  CONNECTED as i,
+  CLEAN as j,
+  DIRTY as k,
+  STALE_REACTION as l,
+  ROOT_EFFECT as m,
+  BRANCH_EFFECT as n,
+  BLOCK_EFFECT as o,
+  ASYNC as p,
+  EAGER_EFFECT as q,
+  RENDER_EFFECT as r,
+  MANAGED_EFFECT as s,
+  DERIVED as t,
+  REACTION_IS_UPDATING as u,
+  EFFECT_PRESERVED as v,
+  EFFECT_TRANSPARENT as w,
+  HEAD_EFFECT as x,
+  USER_EFFECT as y,
+  HYDRATION_START_FAILED as z
 };
