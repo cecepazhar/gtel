@@ -77,3 +77,32 @@ pub struct DeviceInventoryItem {
     pub reports: i64,
     pub recent_error: String,
 }
+
+// Agent Health Report — server API response
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AgentHealthReport {
+    pub device_id: String,
+    pub hospital: String,
+    pub software: String,
+    pub health_status: String, // healthy | warning | critical | offline
+    pub uptime_seconds: f64,
+    pub last_sync: String,
+    pub queue_depth: i64,
+    pub version: String,
+    pub cpu_percent: f64,
+    pub memory_mb: i64,
+    pub disk_usage_percent: f64,
+    pub network_errors: i64,
+    pub recent_errors: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AgentHealthSummary {
+    pub total_devices: i64,
+    pub healthy: i64,
+    pub warning: i64,
+    pub critical: i64,
+    pub offline: i64,
+    pub avg_uptime_seconds: f64,
+    pub total_queue_depth: i64,
+}

@@ -237,3 +237,39 @@ pub async fn get_device_inventory(_state: State<'_, AppState>) -> Result<Vec<Dev
         DeviceInventoryItem { device_id: "DEV-ZEU-PHT-010".into(), hospital: "RSUD Dr. Soetomo".into(), software: "ZEUS".into(), usage_count: 110, software_hours: 240.0, light_source_hours: 200.0, patients: 350, doctors: 4, examinations: 700, reports: 698, recent_error: "".into() },
     ])
 }
+
+#[tauri::command]
+pub async fn get_agent_health_summary(_state: State<'_, AppState>) -> Result<AgentHealthSummary, String> {
+    // TODO: fetch from gtel-server API /api/v1/agent/health/summary
+    // Simulating response for now
+    Ok(AgentHealthSummary {
+        total_devices: 450,
+        healthy: 312,
+        warning: 87,
+        critical: 28,
+        offline: 23,
+        avg_uptime_seconds: 86400.0 * 27.5,
+        total_queue_depth: 1420,
+    })
+}
+
+#[tauri::command]
+pub async fn get_agent_health_detail(device_id: String, _state: State<'_, AppState>) -> Result<AgentHealthReport, String> {
+    // TODO: fetch from gtel-server API /api/v1/agent/health/{device_id}
+    // Simulating response for now
+    Ok(AgentHealthReport {
+        device_id,
+        hospital: "RSUP Dr. Cipto Mangunkusumo".into(),
+        software: "GLESCOPE".into(),
+        health_status: "healthy".into(),
+        uptime_seconds: 86400.0 * 30.0,
+        last_sync: "2026-10-28 14:32:10".into(),
+        queue_depth: 12,
+        version: "2.4.1".into(),
+        cpu_percent: 23.5,
+        memory_mb: 1024,
+        disk_usage_percent: 45.2,
+        network_errors: 0,
+        recent_errors: vec![],
+    })
+}

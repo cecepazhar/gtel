@@ -42,6 +42,8 @@ async fn main() {
             verify_pin,
             set_pin,
             get_device_inventory,
+            get_agent_health_summary,
+            get_agent_health_detail,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
